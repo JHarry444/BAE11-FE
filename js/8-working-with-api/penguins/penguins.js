@@ -1,9 +1,10 @@
 "use strict"
 
+const contextPath = "http://localhost:8080";
 const output = document.getElementById("output");
 
 function getPenguins() {
-  axios.get("http://localhost:8080/getPenguins")
+  axios.get(contextPath + "/getPenguins")
     .then(res => {
       output.innerHTML = "";
 
@@ -11,7 +12,7 @@ function getPenguins() {
 
       penguins.forEach(penguin => {
         const newPenguin = renderPenguin(penguin);
-        console.log("New penguin: ", newPenguin);
+        // console.log("New penguin: ", newPenguin);
         output.appendChild(newPenguin);
       });
     }).catch(err => console.error(err))
@@ -56,18 +57,40 @@ function renderPenguin(penguin) {
   const deletePenguinButton = document.createElement("a");
   deletePenguinButton.className = "card-link";
   deletePenguinButton.innerText = "Delete";
-  deletePenguinButton.addEventListener('click', function () {
-    deletePenguin(penguin.id);
-  });
+  deletePenguinButton.addEventListener('click', () => deletePenguin(penguin.id));
   penguinFooter.appendChild(deletePenguinButton);
 
   return newColumn;
 }
 
 function deletePenguin(id) {
-  axios.delete("http://localhost:8080/removePenguin/" + id)
+  axios.delete(contextPath + "/removePenguin/" + id)
     .then(() => getPenguins())
     .catch(err => console.error(err));
 }
+
+document.getElementById("penguinForm").addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  console.log("this: ", this);
+  console.log("this.name:", this.name);
+  console.log("this.age:", this.age);
+  console.log("this.tuxedoSize:", this.tuxedoSize);
+
+  const data = {
+    name: this.name.value,
+    age: this.age.value,
+    tuxedoSize: this.tuxedoSize.value
+  };
+
+  axios.post(contextPath + "/createPenguin", data, {
+    headers: {
+      "Content-Type": "application/json", // sending JSON
+      "Accept": "application/json" // gimme JSON
+    }
+  }).then(() => getPenguins())
+    .catch(err => console.error(err));
+
+});
 
 getPenguins();
