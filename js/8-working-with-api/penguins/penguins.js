@@ -88,7 +88,11 @@ document.getElementById("penguinForm").addEventListener('submit', function (even
       "Content-Type": "application/json", // sending JSON
       "Accept": "application/json" // gimme JSON
     }
-  }).then(() => getPenguins())
+  }).then(() => {
+    this.reset();
+    this.name.focus();
+    getPenguins();
+  })
     .catch(err => console.error(err));
 
 });
