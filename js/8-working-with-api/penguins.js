@@ -24,8 +24,12 @@ function getPenguins() {
 
 function renderPenguin(penguin) {
 
+    const newColumn = document.createElement("div");
+    newColumn.className = "col";
+
     const newPenguin = document.createElement("div");
-    newPenguin.className = "card m-5";
+    newPenguin.className = "card";
+    newColumn.appendChild(newPenguin);
 
     const penguinBody = document.createElement("div");
     penguinBody.className = "card-body";
@@ -38,10 +42,12 @@ function renderPenguin(penguin) {
 
     const penguinText = document.createElement("p");
     penguinText.className = "card-text";
-    penguinText.innerText = "Age: " + penguin.age;
+    penguinText.innerHTML = "Age: " + penguin.age;
+    penguinText.innerHTML += "<br>";
+    penguinText.innerHTML += "Tuxedo Size: " + penguin.tuxedoSize;
     penguinBody.appendChild(penguinText);
 
-    return newPenguin;
+    return newColumn;
 }
 
 getPenguins();
